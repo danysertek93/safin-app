@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React, { Component } from 'react';
+import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
+import DashboardContainer from './containers/DashboardContainer'
+import UserLogin from './components/user/UserLogin';
+import {PrivateRoute} from './components/router/protected'
+const privateRoute = [
+  {path:'/dashboard', component: ()=><DashboardContainer/>,exact:true}
+];
+class App extends Component {
+  
+  renderDashboard=()=><DashboardContainer/>
+  renderLogin=()=><UserLogin/>
+  render(){
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+        <Switch>
+          {privateRoute.map((route,key)=>{
+            return <PrivateRoute exact={route.exact} path={route.path} component={route.component} key={key}/>
+          })}
+          <Route path='/login' component={this.renderLogin}/>
+        </Switch>
+    </Router>
   );
+}
 }
 
 export default App;
